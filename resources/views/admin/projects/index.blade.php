@@ -22,7 +22,11 @@
                     <th scope="row">{{$project->id}}</th>
                     <td>{{$project->title}}</td>
                     <td>{{$project->getAbstract()}}</td>
-                    <td></td>
+                    <td>
+                        <a href="{{route('admin.projects.show', $project)}}">
+                            <i class="bi bi-eye-fill"></i>
+                        </a>
+                    </td>
                 </tr>
             @empty
                 <tr>

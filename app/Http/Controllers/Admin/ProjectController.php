@@ -13,6 +13,8 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    //  Funzione per visualizzare lista elementi DB
     public function index()
     {
         $projects = Project::paginate(10);
@@ -46,9 +48,11 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
+
+    //  Funzione per visualizzare dettaglio elemento DB
     public function show(Project $project)
     {
-        //
+        return view('admin.projects.show', compact('project'));
     }
 
     /**
