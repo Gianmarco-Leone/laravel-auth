@@ -20,10 +20,10 @@
             @auth
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('home') }}">{{ __('Home') }}</a>
+                        <a class="nav-link {{request()->routeIs('home') ? 'active' : ''}}" href="{{route('home') }}">{{ __('Home') }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('admin.projects.index') }}">{{ __('Projects') }}</a>
+                        <a class="nav-link {{request()->routeIs('admin.projects.index') ? 'active' : ''}}" href="{{route('admin.projects.index') }}">{{ __('Projects') }}</a>
                     </li>
                 </ul>
             @endauth
@@ -48,7 +48,7 @@
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ route('home') }}">{{__('Dashboard')}}</a>
-                            <a class="dropdown-item" href="{{ route('profile.edit') }}">{{__('Profile')}}</a>
+                            <a class="dropdown-item" href="{{ route('profile.edit') }}">{{__('Profilo')}}</a>
                             <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                 document.getElementById('logout-form').submit();">
                                 {{ __('Logout') }}
