@@ -41,4 +41,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // Creo un Mutator per "hashare" la password ogni volta che ne creo una
+    protected function setPasswordAttribute($value) {
+        $this->attributes['password'] = bcrypt($value);
+    }
 }
