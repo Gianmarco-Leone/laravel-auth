@@ -30,6 +30,8 @@
     <main>
         @yield('content')
     </main>
+
+    @yield('modals')
 </body>
 
 </html>

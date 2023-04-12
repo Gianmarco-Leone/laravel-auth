@@ -26,9 +26,10 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    //  Funzione per visualizzare form di creazione elemento nel DB
     public function create()
     {
-        //
+        return view('admin.projects.create');
     }
 
     /**
@@ -37,9 +38,14 @@ class ProjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    // Funzione per salvare i dati dell'elemento inseriti tramite il form della view create
     public function store(Request $request)
     {
-        //
+        $project = new Project;
+        $project->fill($request->all());
+        $project->slug = Project::generateSlug($project->title);
+        $project->save();
+        return to_route('admin.projects.show', $project);
     }
 
     /**
@@ -61,9 +67,10 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
+    //  Funzione per visualizzare form di modifica elemento nel DB
     public function edit(Project $project)
     {
-        //
+        return view('admin.projects.edit', compact('project'));
     }
 
     /**
@@ -73,9 +80,13 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
+    // Funzione che salva i dati modificati passati tramite form della view edit
     public function update(Request $request, Project $project)
     {
-        //
+        $project->fill($request->all());
+        $project->slug = Project::generateSlug($project->title);
+        $project->save();
+        return to_route('admin.projects.show', $project);
     }
 
     /**
@@ -84,8 +95,10 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
+    // Funzione per eliminare elemento dal DB
     public function destroy(Project $project)
     {
-        //
+        $project->delete();
+        return to_route('admin.projects.index');
     }
 }
