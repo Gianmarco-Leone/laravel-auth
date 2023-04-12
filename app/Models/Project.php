@@ -30,4 +30,14 @@ class Project extends Model
         }
         return $possible_slug;
     }
+
+    // Creo i Mutators per formattare le date ogni volta che vengono stampate a schermo
+
+    protected function getCreatedAtAttribute($value) {
+        return date('d/m/Y', strtotime($value));
+    }
+
+    protected function getUpdatedAtAttribute($value) {
+        return date('d/m/Y', strtotime($value));
+    }
 }

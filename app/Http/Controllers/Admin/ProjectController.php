@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Project;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+// use Illuminate\Support\Facades\Validator;
 
 class ProjectController extends Controller
 {
@@ -15,10 +16,15 @@ class ProjectController extends Controller
      */
 
     //  Funzione per visualizzare lista elementi DB
-    public function index()
+    public function index(Request $request)
     {
-        $projects = Project::paginate(10);
-        return view('admin.projects.index', compact('projects'));
+
+        $sort = (!empty($sort_request=$request->get('sort'))) ? $sort_request : "updated_at";
+
+        $order = (!empty($order_request=$request->get('order'))) ? $order_request : 'desc';
+
+        $projects = Project::orderBy($sort, $order)->paginate(10)->withQueryString();
+        return view('admin.projects.index', compact('projects', 'sort', 'order'));
     }
 
     /**
@@ -41,6 +47,9 @@ class ProjectController extends Controller
     // Funzione per salvare i dati dell'elemento inseriti tramite il form della view create
     public function store(Request $request)
     {
+        // Invoco metodo personalizzato che effettua validazioni
+        // $data = $this->validation($request->all());
+
         $project = new Project;
         $project->fill($request->all());
         $project->slug = Project::generateSlug($project->title);
@@ -83,6 +92,9 @@ class ProjectController extends Controller
     // Funzione che salva i dati modificati passati tramite form della view edit
     public function update(Request $request, Project $project)
     {
+        // Invoco metodo personalizzato che effettua validazioni
+        // $data = $this->validation($request->all());
+
         $project->fill($request->all());
         $project->slug = Project::generateSlug($project->title);
         $project->save();
@@ -101,4 +113,26 @@ class ProjectController extends Controller
         $project->delete();
         return to_route('admin.projects.index');
     }
+
+    // * Funzione per la validazione dei campi inseriti nei form
+    // private function validation($data) {
+    //     return Validator::make(
+    //         $data,
+    //         [
+    //         'title'=>'required|string|max:60',
+    //         'image'=>'nullable|string',
+    //         'description'=>'required|string|max:30',
+    //         ],
+    //         [
+    //         'title.required'=>"Il titolo è obbligatorio",
+    //         'title.string'=>"Il titolo deve essere una stringa",
+    //         'title.max'=>"Il titolo deve essere di massimo 60 caratteri",
+
+    //         'image.string'=>"Il path dell'immagine deve essere una stringa",
+
+    //         'description.required'=>"La descrizione è obbligatoria",
+    //         'description.string'=>"La descrizione deve essere una stringa",
+    //         ],
+    //     )->validate();
+    // }
 }
