@@ -13,4 +13,11 @@ class HomeController extends Controller
         $projects = Project::all();
         return view('guest.home', compact('projects'));
     }
+
+    // Funzione per visualizzare il dettaglio della Card per i Guest
+    public function showDetail($id) {
+        $project = Project::findOrFail($id);
+
+        return view('guest.card_detail', compact('project'));
+    }
 }

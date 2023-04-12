@@ -23,5 +23,7 @@ Iniziamo con il definire il layout, `Model`, `Migration`, `Controller` e `Route`
 ## Bonus
 
 1.  Dividete i fogli di stile front e back office e realizzate una homepage del sito in cui visualizzare i progetti per tutti gli utenti Guest in formato "card".
-![Screenshot](./public/img/Screenshot_bonus_1.png)
-<!-- 2.  Sul click su una card mostrare una pagina di dettaglio. -->
+    ![Screenshot](./public/img/Screenshot_bonus_1.png)
+
+2.  Sul click su una card mostrare una pagina di dettaglio.
+    ![Screenshot](./public/img/Screenshot_bonus_2.png)
