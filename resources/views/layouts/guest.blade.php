@@ -14,7 +14,7 @@
         <!-- Scripts -->
         @vite(['resources/js/front.js'])
     </head>
-    <body class="bg-dark">
+    <body>
         <header>
             @include('layouts.partials._navbar')
         </header>
