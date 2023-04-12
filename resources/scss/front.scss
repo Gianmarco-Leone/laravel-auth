@@ -1,0 +1,9 @@
+@import "~bootstrap/scss/bootstrap";
+@import "./partials/_header";
+
+main {
+    height: calc(100vh - 75px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
