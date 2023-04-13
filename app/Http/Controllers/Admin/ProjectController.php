@@ -54,12 +54,12 @@ class ProjectController extends Controller
         $data = $this->validation($request->all());
 
         // * Metodo della classe Arr di Laravel per cercare un elemento per la chiave all'interno di un array
-        if(Arr::exists($request->all(), 'image')) {
+        if(Arr::exists($data, 'image')) {
 
             // con il metodo Storage::put() carico l'immagine nella cartella del progetto
-            $path = Storage::put('uploads/projects', $request->all()['image']);
+            $path = Storage::put('uploads/projects', $data['image']);
             
-            $request->all()['image'] = $path;
+            $data['image'] = $path;
         };
 
         $project = new Project;
@@ -110,7 +110,7 @@ class ProjectController extends Controller
         $data = $this->validation($request->all());
 
         // * Metodo della classe Arr di Laravel per cercare un elemento per la chiave all'interno di un array
-        if(Arr::exists($request->all(), 'image')) {
+        if(Arr::exists($data, 'image')) {
 
             // SE il progetto ha già una foto caricata, prima di aggiungerne un'altra
             if ($project->image) {
@@ -120,9 +120,9 @@ class ProjectController extends Controller
             // ALTRIMENTI, se non sono presenti foto
             } else { 
             // con il metodo Storage::put() carico l'immagine nella cartella del progetto
-            $path = Storage::put('uploads/projects', $request->all()['image']);
+            $path = Storage::put('uploads/projects', $data['image']);
             
-            $request->all()['image'] = $path;
+            $data['image'] = $path;
             };
         };
 
