@@ -54,7 +54,7 @@
                             @enderror
                         </div>
                         <div class="col-4 border p-2">
-                            <img src="{{$project->getImageUri()}}" alt="{{$project->title}}" class="img-fluid">
+                            <img src="{{$project->getImageUri()}}" alt="{{$project->title}}" class="img-fluid" id="image_preview">
                         </div>
                     </div>
                 </div>
@@ -80,5 +80,29 @@
         </div>
     </div>
 </section>
+
+@endsection
+
+@section('scripts')
+
+<script>
+    const imageEl = document.getElementById('image');
+    const imagePreviewEl = document.getElementById('image_preview');
+    const imagePlaceholder = imagePreviewEl.src;
+
+    imageEl.addEventListener(
+        'change', () => {
+            if (imageEl.files && imageEl.files[0]) {
+                const reader = new FileReader();
+                reader.readAsDataURL(imageEl.files[0]);
+
+                reader.onload = e => {
+                    imagePreviewEl.src = e.target.result;
+                }
+            } else {
+                imagePreviewEl.src = imagePlaceholder;
+            }
+        });
+</script>
 
 @endsection
