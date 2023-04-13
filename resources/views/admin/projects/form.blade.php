@@ -19,7 +19,7 @@
     @endif
 
     <div class="text-center">
-        <h1 class="my-4">Aggiungi un nuovo progetto</h1>
+        <h1 class="my-4">{{$project->id ? 'Modifica progetto - ' . $project->title : 'Aggiungi un nuovo progetto'}}</h1>
 
         <a href="{{route('admin.projects.index')}}" class="btn btn-primary">
             Torna alla lista
