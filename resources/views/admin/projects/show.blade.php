@@ -7,9 +7,15 @@
     <section class="container text-center">
         <h1 class="my-4">Dettaglio - {{$project->title}}</h1>
 
-        <a href="{{route('admin.projects.index')}}" class="btn btn-primary">
-            Torna alla lista
-        </a>
+        <div class="d-flex justify-content-center">
+            <a href="{{route('admin.projects.index')}}" class="btn btn-primary me-3">
+                Torna alla lista
+            </a>
+    
+            <a href="{{route('admin.projects.edit', $project)}}" class="btn btn-primary ms-3">
+                Modifica progetto
+            </a>
+        </div>
 
         <div class="row justify-content-center my-5">
             <div class="col-10 border pt-5">

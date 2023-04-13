@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Project;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-// use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Validator;
 
 class ProjectController extends Controller
 {
@@ -35,7 +35,8 @@ class ProjectController extends Controller
     //  Funzione per visualizzare form di creazione elemento nel DB
     public function create()
     {
-        return view('admin.projects.create');
+        $project = new Project;
+        return view('admin.projects.form', compact('project'));
     }
 
     /**
@@ -48,10 +49,11 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         // Invoco metodo personalizzato che effettua validazioni
-        // $data = $this->validation($request->all());
+        $data = $this->validation($request->all());
 
         $project = new Project;
-        $project->fill($request->all());
+        // $project->fill($request->all());
+        $project->fill($data);
         $project->slug = Project::generateSlug($project->title);
         $project->save();
         return to_route('admin.projects.show', $project);
@@ -79,7 +81,7 @@ class ProjectController extends Controller
     //  Funzione per visualizzare form di modifica elemento nel DB
     public function edit(Project $project)
     {
-        return view('admin.projects.edit', compact('project'));
+        return view('admin.projects.form', compact('project'));
     }
 
     /**
@@ -93,9 +95,10 @@ class ProjectController extends Controller
     public function update(Request $request, Project $project)
     {
         // Invoco metodo personalizzato che effettua validazioni
-        // $data = $this->validation($request->all());
+        $data = $this->validation($request->all());
 
-        $project->fill($request->all());
+        // $project->fill($request->all());
+        $project->fill($data);
         $project->slug = Project::generateSlug($project->title);
         $project->save();
         return to_route('admin.projects.show', $project);
@@ -115,24 +118,24 @@ class ProjectController extends Controller
     }
 
     // * Funzione per la validazione dei campi inseriti nei form
-    // private function validation($data) {
-    //     return Validator::make(
-    //         $data,
-    //         [
-    //         'title'=>'required|string|max:60',
-    //         'image'=>'nullable|string',
-    //         'description'=>'required|string|max:30',
-    //         ],
-    //         [
-    //         'title.required'=>"Il titolo è obbligatorio",
-    //         'title.string'=>"Il titolo deve essere una stringa",
-    //         'title.max'=>"Il titolo deve essere di massimo 60 caratteri",
+    private function validation($data) {
+        return Validator::make(
+            $data,
+            [
+            'title'=>'required|string|max:60',
+            'image'=>'nullable|url',
+            'description'=>'required|string',
+            ],
+            [
+            'title.required'=>"Il titolo è obbligatorio",
+            'title.string'=>"Il titolo deve essere una stringa",
+            'title.max'=>"Il titolo deve essere di massimo 60 caratteri",
 
-    //         'image.string'=>"Il path dell'immagine deve essere una stringa",
+            'image.url'=>"Il path dell'immagine deve essere un url",
 
-    //         'description.required'=>"La descrizione è obbligatoria",
-    //         'description.string'=>"La descrizione deve essere una stringa",
-    //         ],
-    //     )->validate();
-    // }
+            'description.required'=>"La descrizione è obbligatoria",
+            'description.string'=>"La descrizione deve essere una stringa",
+            ],
+        )->validate();
+    }
 }
