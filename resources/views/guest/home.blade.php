@@ -10,7 +10,7 @@
             <div class="col-4">
                 <div class="card">
                     <div class="card-top">
-                        <img src="{{$project->image}}" class="card-img-top" alt="{{$project->title}}">
+                        <img src="{{$project->getImageUri()}}" class="card-img-top" alt="{{$project->title}}">
                     </div>
                     <div class="card-body">
                         <h5 class="card-title text-center">{{$project->title}}</h5>

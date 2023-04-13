@@ -6,7 +6,7 @@
     <h1 class="text-center my-4">{{$project->title}}</h1>
 
     <figure>
-        <img src="{{$project->image}}" alt="{{$project->title}}">
+        <img src="{{$project->getImageUri()}}" alt="{{$project->title}}">
     </figure>
 
     <p class="text-center fs-4">
