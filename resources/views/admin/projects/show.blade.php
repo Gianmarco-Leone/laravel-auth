@@ -28,7 +28,7 @@
             <div class="col-10 border pt-5">
                 <div class="row justify-content-center">
                     <div class="col-12">
-                        <img src="{{$project->image ? asset('storage/') . $project->image : 'https://www.grouphealth.ca/wp-content/uploads/2018/05/placeholder-image.png'}}" alt="{{$project->title}}" width="300">
+                        <img src="{{$project->getImageUri()}}" alt="{{$project->title}}" width="300">
                     </div>
                     <div class="col-4 my-5">
                         <p class="fw-semibold">

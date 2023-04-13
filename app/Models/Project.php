@@ -31,6 +31,11 @@ class Project extends Model
         return $possible_slug;
     }
 
+    // Creo un getter per avere sempre o il percorso dell'immagine caricata come file o il path assoluto di un'immagine di placeholder
+    public function getImageUri() {
+        return $this->image ? asset('storage/' . $this->image) : 'https://www.grouphealth.ca/wp-content/uploads/2018/05/placeholder-image.png';
+    }
+
     // Creo i Mutators per formattare le date ogni volta che vengono stampate a schermo
 
     protected function getCreatedAtAttribute($value) {

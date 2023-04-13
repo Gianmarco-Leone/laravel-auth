@@ -54,7 +54,7 @@
                             @enderror
                         </div>
                         <div class="col-4 border">
-                            <img src="{{$project->image ? asset('storage/') . $project->image : 'https://www.grouphealth.ca/wp-content/uploads/2018/05/placeholder-image.png'}}" alt="{{$project->title}}" class="img-fluid">
+                            <img src="{{$project->getImageUri()}}" alt="{{$project->title}}" class="img-fluid">
                         </div>
                     </div>
                 </div>
