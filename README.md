@@ -19,6 +19,7 @@ Iniziamo con il definire il layout, `Model`, `Migration`, `Controller` e `Route`
 4.  Possibilità di cliccare sul titolo della colonna nella tabella Backoffice per visualizzare risultati in oridine crescente.
     Al successivo click, l'ordine si invertirà, e quello visualizzato sarà quindi decrescente.
     Di default l'ordine di visualizzazione è da quello con la modifica più recente in poi.
+5.  Possibilità di allegare le immagini ai progetti come dei veri e proprio file.
 
 ## Bonus
 
