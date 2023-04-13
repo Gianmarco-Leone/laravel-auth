@@ -15,7 +15,7 @@ class ProjectController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    //  Funzione per visualizzare lista elementi DB
+    // * Funzione per visualizzare lista elementi DB
     public function index(Request $request)
     {
 
@@ -32,7 +32,7 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    //  Funzione per visualizzare form di creazione elemento nel DB
+    // * Funzione per visualizzare form di creazione elemento nel DB
     public function create()
     {
         $project = new Project;
@@ -45,7 +45,7 @@ class ProjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    // Funzione per salvare i dati dell'elemento inseriti tramite il form della view create
+    // * Funzione per salvare i dati dell'elemento inseriti tramite il form della view create
     public function store(Request $request)
     {
         // Invoco metodo personalizzato che effettua validazioni
@@ -56,7 +56,8 @@ class ProjectController extends Controller
         $project->fill($data);
         $project->slug = Project::generateSlug($project->title);
         $project->save();
-        return to_route('admin.projects.show', $project);
+        return to_route('admin.projects.show', $project)
+            ->with('message_content', 'Nuovo progetto aggiunto con successo');
     }
 
     /**
@@ -66,7 +67,7 @@ class ProjectController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    //  Funzione per visualizzare dettaglio elemento DB
+    // * Funzione per visualizzare dettaglio elemento DB
     public function show(Project $project)
     {
         return view('admin.projects.show', compact('project'));
@@ -78,7 +79,7 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
-    //  Funzione per visualizzare form di modifica elemento nel DB
+    // * Funzione per visualizzare form di modifica elemento nel DB
     public function edit(Project $project)
     {
         return view('admin.projects.form', compact('project'));
@@ -91,7 +92,7 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
-    // Funzione che salva i dati modificati passati tramite form della view edit
+    // * Funzione che salva i dati modificati passati tramite form della view edit
     public function update(Request $request, Project $project)
     {
         // Invoco metodo personalizzato che effettua validazioni
@@ -101,7 +102,8 @@ class ProjectController extends Controller
         $project->fill($data);
         $project->slug = Project::generateSlug($project->title);
         $project->save();
-        return to_route('admin.projects.show', $project);
+        return to_route('admin.projects.show', $project)
+        ->with('message_content', 'Progetto ' . $project->title . ' modificato con successo');
     }
 
     /**
@@ -110,11 +112,14 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
-    // Funzione per eliminare elemento dal DB
+    // * Funzione per eliminare elemento dal DB
     public function destroy(Project $project)
     {
+        $id_project = $project->id;
         $project->delete();
-        return to_route('admin.projects.index');
+        return to_route('admin.projects.index')
+        ->with('message_type', 'danger')
+        ->with('message_content', 'Progetto ' . $project->title . ' eliminato con successo');
     }
 
     // * Funzione per la validazione dei campi inseriti nei form

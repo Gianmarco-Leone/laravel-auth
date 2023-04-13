@@ -4,7 +4,14 @@
 
 @section('content')
 
-<section class="container">
+<section class="container pt-4">
+
+    @if (session('message_content'))
+        <div class="alert alert-{{session('message_type') ? session('message_type') : 'success'}}">
+            {{session('message_content')}}
+        </div>
+    @endif
+
     <div class="row justify-content-between align-items-center my-4">
         <div class="col">
             <h1>I Progetti</h1>
