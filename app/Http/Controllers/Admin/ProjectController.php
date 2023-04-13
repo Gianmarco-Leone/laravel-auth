@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Project;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ProjectController extends Controller
@@ -50,6 +52,15 @@ class ProjectController extends Controller
     {
         // Invoco metodo personalizzato che effettua validazioni
         $data = $this->validation($request->all());
+
+        // * Metodo della classe Arr di Laravel per cercare un elemento per la chiave all'interno di un array
+        if(Arr::exists($request->all(), 'image')) {
+
+            // con il metodo Storage::put() carico l'immagine nella cartella del progetto
+            $path = Storage::put('uploads/projects', $request->all()['image']);
+            
+            $request->all()['image'] = $path;
+        };
 
         $project = new Project;
         // $project->fill($request->all());
@@ -128,7 +139,7 @@ class ProjectController extends Controller
             $data,
             [
             'title'=>'required|string|max:60',
-            'image'=>'nullable|url',
+            'image'=>'nullable|image|mimes:jpg,jpeg,png',
             'description'=>'required|string',
             ],
             [
@@ -136,7 +147,8 @@ class ProjectController extends Controller
             'title.string'=>"Il titolo deve essere una stringa",
             'title.max'=>"Il titolo deve essere di massimo 60 caratteri",
 
-            'image.url'=>"Il path dell'immagine deve essere un url",
+            'image.image'=>"Il file caricato deve essere un'immagine",
+            'image.mimes'=>"I formati accettati per le immagini sono: jpg, jpeg e png",
 
             'description.required'=>"La descrizione è obbligatoria",
             'description.string'=>"La descrizione deve essere una stringa",

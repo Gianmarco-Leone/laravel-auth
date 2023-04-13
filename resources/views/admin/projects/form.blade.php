@@ -7,16 +7,7 @@
 <section class="container pt-4">
 
     <!-- Se sono presenti errori nella compilazione del form -->
-    @if($errors->any())
-        <div class="alert alert-danger">
-            <h5>Durante l'invio del form sono stati riscontrati i seguenti errori:</h5>
-            <ul>
-                @foreach($errors->all() as $error)
-                <li>{{$error}}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    @include('layouts.partials._validation-errors')
 
     <div class="text-center">
         <h1 class="my-4">{{$project->id ? 'Modifica progetto - ' . $project->title : 'Aggiungi un nuovo progetto'}}</h1>
@@ -30,16 +21,16 @@
         <div class="card-body">
 
             @if ($project->id)
-                <form method="POST" action="{{route('admin.projects.update', $project)}}" class="row">
+                <form method="POST" action="{{route('admin.projects.update', $project)}}" enctype="multipart/form-data" class="row">
                 @method('put')
             @else
-                <form method="POST" action="{{route('admin.projects.store')}}" class="row">
+                <form method="POST" action="{{route('admin.projects.store')}}" enctype="multipart/form-data" class="row">
             @endif 
                 @csrf
     
                 <div class="col-4">
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-12 mb-4">
                             <label for="title" class="form-label">
                                 Titolo    
                             </label> 
@@ -51,16 +42,19 @@
                             @enderror
                         </div>
     
-                        <div class="col-12">
+                        <div class="col-8">
                             <label for="image" class="form-label">
                                 Immagine    
                             </label> 
-                            <input type="url" name="image" id="image" class="@error('image') is-invalid @enderror form-control" value="{{old('image', $project->image)}}">
+                            <input type="file" name="image" id="image" class="@error('image') is-invalid @enderror form-control" value="{{old('image', $project->image)}}">
                             @error('image')
                             <div class="invalid-feedback">
                                 {{$message}}
                             </div>
                             @enderror
+                        </div>
+                        <div class="col-4 border">
+                            <img src="{{$project->image ? asset('storage/') . $project->image : 'https://www.grouphealth.ca/wp-content/uploads/2018/05/placeholder-image.png'}}" alt="{{$project->title}}" class="img-fluid">
                         </div>
                     </div>
                 </div>
@@ -69,7 +63,7 @@
                     <label for="description" class="form-label">
                         Descrizione    
                     </label>
-                    <textarea name="description" id="description" class="@error('description') is-invalid @enderror form-control"  rows="4">{{old('description', $project->description)}}</textarea>
+                    <textarea name="description" id="description" class="@error('description') is-invalid @enderror form-control"  rows="6">{{old('description', $project->description)}}</textarea>
                     @error('description')
                     <div class="invalid-feedback">
                         {{$message}}
