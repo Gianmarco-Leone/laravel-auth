@@ -109,6 +109,23 @@ class ProjectController extends Controller
         // Invoco metodo personalizzato che effettua validazioni
         $data = $this->validation($request->all());
 
+        // * Metodo della classe Arr di Laravel per cercare un elemento per la chiave all'interno di un array
+        if(Arr::exists($request->all(), 'image')) {
+
+            // SE il progetto ha già una foto caricata, prima di aggiungerne un'altra
+            if ($project->image) {
+                // elimino l'immagine presente
+                Storage::delete($project->image);
+
+            // ALTRIMENTI, se non sono presenti foto
+            } else { 
+            // con il metodo Storage::put() carico l'immagine nella cartella del progetto
+            $path = Storage::put('uploads/projects', $request->all()['image']);
+            
+            $request->all()['image'] = $path;
+            };
+        };
+
         // $project->fill($request->all());
         $project->fill($data);
         $project->slug = Project::generateSlug($project->title);
@@ -126,7 +143,9 @@ class ProjectController extends Controller
     // * Funzione per eliminare elemento dal DB
     public function destroy(Project $project)
     {
-        $id_project = $project->id;
+        // Quando elimino un elemento dal DB controllo se aveva un'immagine, in quel caso la elimino
+        if($project->image) Storage::delete($project->image);
+        
         $project->delete();
         return to_route('admin.projects.index')
         ->with('message_type', 'danger')
