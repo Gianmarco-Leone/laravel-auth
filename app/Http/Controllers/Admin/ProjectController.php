@@ -66,6 +66,7 @@ class ProjectController extends Controller
         // $project->fill($request->all());
         $project->fill($data);
         $project->slug = Project::generateSlug($project->title);
+        $project->is_published = $request->has('is_published') ? 1 : 0;
         $project->save();
         return to_route('admin.projects.show', $project)
             ->with('message_content', 'Nuovo progetto aggiunto con successo');
@@ -123,6 +124,7 @@ class ProjectController extends Controller
         // $project->fill($request->all());
         $project->fill($data);
         $project->slug = Project::generateSlug($project->title);
+        $project->is_published = $request->has('is_published') ? 1 : 0;
         $project->save();
         return to_route('admin.projects.show', $project)
         ->with('message_content', 'Progetto ' . $project->title . ' modificato con successo');
@@ -154,6 +156,7 @@ class ProjectController extends Controller
             'title'=>'required|string|max:60',
             'image'=>'nullable|image|mimes:jpg,jpeg,png',
             'description'=>'required|string',
+            'is_published' => 'boolean',
             ],
             [
             'title.required'=>"Il titolo è obbligatorio",
@@ -165,6 +168,8 @@ class ProjectController extends Controller
 
             'description.required'=>"La descrizione è obbligatoria",
             'description.string'=>"La descrizione deve essere una stringa",
+
+            'is_published.boolean' => '"Pubblicato" puù assumere solo valori di 1 o 0'
             ],
         )->validate();
     }

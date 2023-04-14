@@ -10,7 +10,7 @@ class Project extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["title", "description", "image"];
+    protected $fillable = ["title", "description", "image", "is_published"];
 
     // Funzione che ritorna una sottostringa e accetta come parametro il numero massimo di caratteri desiderati, con un valore di default di 30
     public function getAbstract($max = 30) {
