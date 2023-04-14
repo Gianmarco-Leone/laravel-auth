@@ -5,7 +5,7 @@
 <section class="container py-4">
     <h1 class="my-4">I Progetti</h1>
     
-    <div class="row g-5">
+    <div class="row flex-nowrap g-5">
         @forelse($projects as $project)
             <div class="col-4">
                 <div class="card">

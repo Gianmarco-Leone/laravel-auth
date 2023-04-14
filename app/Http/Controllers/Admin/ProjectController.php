@@ -63,7 +63,6 @@ class ProjectController extends Controller
         };
 
         $project = new Project;
-        // $project->fill($request->all());
         $project->fill($data);
         $project->slug = Project::generateSlug($project->title);
         $project->is_published = $request->has('is_published') ? 1 : 0;
@@ -121,7 +120,6 @@ class ProjectController extends Controller
             $data['image'] = $path;
         };
 
-        // $project->fill($request->all());
         $project->fill($data);
         $project->slug = Project::generateSlug($project->title);
         $project->is_published = $request->has('is_published') ? 1 : 0;

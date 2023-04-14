@@ -10,7 +10,7 @@ class HomeController extends Controller
 {
     // Funzione che ritorna la vista del template home guest con la visualizzazione delle card di tutti i progetti
     public function index() {
-        $projects = Project::all();
+        $projects = Project::where('is_published', 1)->orderBy('updated_at', 'DESC')->get();
         return view('guest.home', compact('projects'));
     }
 
