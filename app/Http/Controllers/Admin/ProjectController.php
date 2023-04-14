@@ -112,18 +112,12 @@ class ProjectController extends Controller
         // * Metodo della classe Arr di Laravel per cercare un elemento per la chiave all'interno di un array
         if(Arr::exists($data, 'image')) {
 
-            // SE il progetto ha già una foto caricata, prima di aggiungerne un'altra
-            if ($project->image) {
-                // elimino l'immagine presente
-                Storage::delete($project->image);
-
-            // ALTRIMENTI, se non sono presenti foto
-            } else { 
+            // SE il progetto ha già una foto caricata, prima di aggiungerne un'altra elimino l'immagine presente
+            if ($project->image) Storage::delete($project->image);
             // con il metodo Storage::put() carico l'immagine nella cartella del progetto
             $path = Storage::put('uploads/projects', $data['image']);
             
             $data['image'] = $path;
-            };
         };
 
         // $project->fill($request->all());
