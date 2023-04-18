@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('slug', 100)->unique();
             $table->text('description');
             $table->text('image')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

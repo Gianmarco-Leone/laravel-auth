@@ -2,8 +2,11 @@
 
 use App\Http\Controllers\ProfileController;
 
-use App\Http\Controllers\Admin\HomeController as AdminHomeController;
+// * Guest
 use App\Http\Controllers\Guest\HomeController as GuestHomeController;
+
+// * Admin
+use App\Http\Controllers\Admin\HomeController as AdminHomeController;
 use App\Http\Controllers\Admin\ProjectController;
 
 use Illuminate\Support\Facades\Route;
@@ -19,19 +22,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// * Rotte statiche Guest
 Route::get('/', [GuestHomeController::class, 'index']);
 Route::get('/projects/{index}', [GuestHomeController::class, 'showDetail'])->name('card_detail');
 
+// * Rotte statiche Admin
 Route::get('/home', [AdminHomeController::class, 'index'])->middleware('auth')->name('home');
 
+// * Rotte risorse e softDelete
 Route::middleware('auth')
     ->prefix('/admin')
     ->name('admin.')
     ->group(function () {
+        Route::get('projects/trash', [ProjectController::class, 'trash'])->name('projects.trash');
+        Route::put('projects/{project}/restore', [ProjectController::class, 'restore'])->name('projects.restore');
+        Route::delete('projects/{project}/forcedelete', [ProjectController::class, 'forcedelete'])->name('projects.forcedelete');
+        
         Route::resource('projects', ProjectController::class)
         ->parameters(['projects' => 'project:slug']);
     });
 
+// * Rotte profilo
 Route::middleware('auth')
     ->prefix('/profile')
     ->name('profile.')

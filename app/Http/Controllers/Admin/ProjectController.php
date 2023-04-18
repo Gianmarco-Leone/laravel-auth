@@ -143,8 +143,54 @@ class ProjectController extends Controller
         $project->delete();
         return to_route('admin.projects.index')
         ->with('message_type', 'danger')
-        ->with('message_content', 'Progetto ' . $project->title . ' eliminato con successo');
+        ->with('message_content', 'Progetto ' . $project->title . ' cestinato con successo.');
     }
+
+    /**
+     * Display a listing of the trashed resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    // * Funzione per visualizzare lista elementi DB nel cestino
+    public function trash(Request $request) {
+        $sort = (!empty($sort_request=$request->get('sort'))) ? $sort_request : "updated_at";
+
+        $order = (!empty($order_request=$request->get('order'))) ? $order_request : 'desc';
+
+        $trashed_projects = Project::onlyTrashed()->orderBy($sort, $order)->paginate(10)->withQueryString();
+        return view('admin.projects.trash', compact('trashed_projects', 'sort', 'order'));
+    }
+
+    /**
+     * Restores the specified resource from storage.
+     *
+     * @param  \App\Models\Shoe  $shoe
+     * @return \Illuminate\Http\Response
+     */
+    public function restore(Int $id)
+    {
+        $project = Project::where('id', $id)->onlyTrashed()->first();
+        $project->restore();
+        return to_route('admin.projects.index')->with('message_content', 'Progetto ripristinato!');
+    }
+
+    /**
+     * Force deletes the specified resource from storage.
+     *
+     * @param  \App\Models\Shoe  $shoe
+     * @return \Illuminate\Http\Response
+     */
+    public function forcedelete(Int $id)
+    {
+        $project = Project::where('id', $id)->onlyTrashed()->first();
+        if ($project->image) Storage::delete($project->image);
+        $project->forceDelete();
+        return to_route('admin.projects.trash')->with('message_content', 'Progetto eliminato definitivamente!')
+            ->with('message_type', 'danger');
+    }
+
+
 
     // * Funzione per la validazione dei campi inseriti nei form
     private function validation($data) {

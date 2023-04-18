@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-name', 'Lista progetti')
+@section('page-name', 'Cestino')
 
 @section('content')
 
@@ -14,15 +14,13 @@
 
     <div class="row justify-content-between align-items-center my-4">
         <div class="col">
-            <h1>I Progetti</h1>
+            <h1>Cestino</h1>
         </div>
 
         <div class="col-3 text-end">
-            <a href="{{route('admin.projects.create')}}" class="btn btn-primary ms-auto">
-                Aggiungi progetto
+            <a href="{{route('admin.projects.index')}}" class="btn btn-primary ms-auto">
+                Torna alla lista
             </a>
-            
-        <a href="{{ url('admin/projects/trash') }}" class="btn btn-danger ms-auto">Cestino</a>
         </div>
     </div>
     
@@ -73,7 +71,7 @@
             </tr>
         </thead>
         <tbody>
-            @forelse($projects as $project)
+            @forelse($trashed_projects as $project)
                 <tr>
                     <th scope="row">{{$project->id}}</th>
                     <td>{{$project->title}}</td>
@@ -81,54 +79,83 @@
                     <td>{{$project->created_at}}</td>
                     <td>{{$project->updated_at}}</td>
                     <td>
-                        <a href="{{route('admin.projects.show', $project)}}" title="Mostra il progetto">
-                            <i class="bi bi-eye-fill"></i>
-                        </a>
+                        <button class="bi bi-recycle btn-icon ms-3 text-success" data-bs-toggle="modal"
+                        data-bs-target="#restore-modal-{{ $project->id }}" title="Ripristina il progetto">
+                        </button>
 
-                        <a href="{{route('admin.projects.edit', $project)}}" title="Modifica il progetto" class="mx-3">
-                            <i class="bi bi-pencil-fill"></i>
-                        </a>
-
-                        <!-- Bottone che triggera la modal -->
-                        <button class="bi bi-trash3-fill btn-icon text-danger" data-bs-toggle="modal" data-bs-target="#trash-project-{{$project->id}}" title="Cestina il progetto"></button>
+                        <button class="bi bi-trash3-fill btn-icon ms-3 text-danger" data-bs-toggle="modal"
+                        data-bs-target="#delete-modal-{{ $project->id }}" title="Elimina il progetto">
+                        </button>
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <th scope="row">Nessun risultato</th>
+                    <th scope="row">Cestino vuoto</th>
                 </tr>
             @endforelse
         </tbody>
     </table>
 
-    {{ $projects->links() }}
+    {{ $trashed_projects->links() }}
 
 </section>
 
 @endsection
 
 @section('modals')
-    @foreach($projects as $project)
-        <!-- Modal -->
-        <div class="modal fade" id="trash-project-{{$project->id}}" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    @foreach($trashed_projects as $project)
+
+        <!-- Modal restore -->
+        <div class="modal fade" id="restore-modal-{{ $project->id }}" tabindex="-1" data-bs-backdrop="static"
+            aria-labelledby="restore-modal-{{ $project->id }}-label" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h1 class="modal-title fs-5" id="restore-modal-{{ $project->id }}-label">Conferma Ripristino</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-start">
+                Sei sicuro di voler ripristinare il prodotto <strong>{{ $project->model }}</strong> con ID
+                <strong> {{ $project->id }}</strong>?
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+
+                <!-- Form per il restore -->
+                <form action="{{ route('admin.projects.restore', $project->id) }}" method="POST" class="">
+                    @method('put')
+                    @csrf
+
+                    <button type="submit" class="btn btn-success">Ripristina</button>
+                </form>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <!-- Modal delete -->
+        <div class="modal fade" id="delete-modal-{{ $project->id }}" tabindex="-1" data-bs-backdrop="static"
+            aria-labelledby="delete-modal-{{ $project->id }}-label" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Attenzione!!!</h1>
+                        <h1 class="modal-title fs-5" id="delete-project-{{$project->id}}">Attenzione!!!</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        Sei sicuro di voler spostare nel cestino il progetto <span class="fw-semibold">{{$project->title}}</span> ?
+                        Sei sicuro di voler eliminare definitivamente il progetto <span class="fw-semibold">{{$project->title}}</span> dal DataBase?
+                        <br>
+                        Ricorda che l'operazione non è reversibile.
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
 
-                        <!-- Form per il destroy -->
-                        <form method="POST" action="{{route('admin.projects.destroy', $project)}}">
+                        <!-- Form per il forceDelete -->
+                        <form method="POST" action="{{route('admin.projects.forcedelete', $project->id)}}">
                         @csrf
                         @method('delete')
                         
-                        <button type="submit" class="btn btn-danger">Cestina</button>
+                        <button type="submit" class="btn btn-danger">Elimina</button>
                         </form>
                     </div>
                 </div>
